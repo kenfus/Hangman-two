@@ -3,6 +3,7 @@ import streamlit as st
 import string
 import time
 import dataclasses
+import streamlit.components.v1 as components
 
 # [start] [persistent states]__________________________________________
 @dataclasses.dataclass
@@ -25,8 +26,6 @@ hm = _gameState()
 
 
 # [start] [HangMan]____________________________________________________
-
-
 def HangMan():
     word = 'Windsurfing'
     st.title('HangMan')
@@ -47,7 +46,7 @@ def HangMan():
     st.markdown(
     f"""
     <br>
-        Renewable alternative to solar energy + to ... the web + ing
+        `Renewable alternative to solar energy` + `to ... the web` + `ing`
     <br>
     """,
     unsafe_allow_html=True,
@@ -57,7 +56,7 @@ def HangMan():
 
     holder1, holder2, holder3 = st.empty(), st.empty(), st.empty()
     user_letter = holder1.text_input(
-        "Guess a letter:", max_chars=1, key=str(hm.hm_idxml_key + 1)
+        "Guess a letter:", max_chars=1, key=str(hm.hm_idxml_key + 1), on_change=cbk
     ).upper()
 
     st.markdown(
@@ -97,6 +96,9 @@ def HangMan():
                 f"\nCongratulations! You guessed the word [{hm.hm_word}] correctly!!"
             )
             st.balloons()
+            with open("coupon_surf.pdf", "rb") as pdf_file:
+                PDFbyte = pdf_file.read()
+            st.download_button("🏄🏄🏄", data=PDFbyte, file_name="coupon_surf.pdf")
 
         else:
             holder3.error("Game over! Try again!")
@@ -117,5 +119,6 @@ def HangMan():
 
 class CheaterWarning(Exception):
     pass
+
 if __name__ == "__main__":
     HangMan()
